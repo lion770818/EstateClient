@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Estate</string>
+    <string name="cancle">取消</string>
+    <string name="delete">刪除</string>
+    <string name="update">修改</string>
+
+</resources>

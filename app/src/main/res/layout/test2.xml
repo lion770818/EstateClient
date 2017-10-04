@@ -1,0 +1,83 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="選擇喜歡的物品" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:id="@+id/iphone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I Phone" />
+
+        <CheckBox
+            android:id="@+id/pc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Computer" />
+
+        <CheckBox
+            android:id="@+id/picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Picture" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:id="@+id/iphone2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I Phone222" />
+
+        <CheckBox
+            android:id="@+id/pc2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Computer222" />
+
+        <CheckBox
+            android:id="@+id/picture2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Picture" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/showtitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="喜歡的物品有：" />
+
+    <TextView
+        android:id="@+id/show"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+    <Button
+        android:id="@+id/end"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="END" />
+</LinearLayout>
