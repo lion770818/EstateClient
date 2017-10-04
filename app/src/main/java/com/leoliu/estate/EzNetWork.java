@@ -40,7 +40,7 @@ public class EzNetWork {
     //***********************************************************************************************************
     // 創建
     //***********************************************************************************************************
-    public static void onCreate(Activity activity, String project_name) {
+    public static void onCreate(Activity activity, String activity_name) {
         Log.d(TAG, "onCreate");
 
         mActivity = activity;

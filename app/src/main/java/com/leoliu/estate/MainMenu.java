@@ -83,7 +83,7 @@ public class MainMenu extends AppCompatActivity {
 
         EzSharedPreferences.onCreate(this,TAG);
         EzNetWork.onCreate(this,TAG);
-
+        EzLib.onCreate(this,TAG);
 
         String Account = EzSharedPreferences.readDataString("Account");
         String Name = EzSharedPreferences.readDataString("Name");

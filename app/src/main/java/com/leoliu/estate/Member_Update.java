@@ -43,10 +43,13 @@ public class Member_Update extends AppCompatActivity {
     private static int iVip_rank = 0; // 會員等級
     private static Button button_addMember;
 
+    //==============================================================================================
+    // init
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_member_update);
         context = this;
+        EzLib.onCreate(this,TAG);
 
         Bundle bundle =this.getIntent().getExtras();
         int position = bundle.getInt("position");
@@ -146,6 +149,8 @@ public class Member_Update extends AppCompatActivity {
     }
 
 
+    //==============================================================================================
+    // 讀取資料 (將收到的資料更新到UI上)
     private void ReadData(int position)
     {
 
@@ -179,28 +184,11 @@ public class Member_Update extends AppCompatActivity {
         {
             Log.d(TAG, "例外 msg=" + ex.getMessage());
             Log.d(TAG, "例外 msg=" + ex.toString());
-            setAlertDialog1Event( "例外", ex.toString());
+            EzLib.setAlertDialog1Event( "例外", ex.toString());
         }
 
     }
 
-    //==============================================================================================
-    // http://rx1226.pixnet.net/blog/post/305873256-%5Bandroid%5D-10-1-%E5%9F%BA%E7%A4%8Edialog
-    private void setAlertDialog1Event( String Title, String Message ){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder( context);
-
-        builder.setTitle(Title);
-        builder.setMessage(Message);
-        builder.setPositiveButton("關閉", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
     //==============================================================================================
     // 封包事件接收函式
     private Handler mHandler = new Handler(){
@@ -219,13 +207,13 @@ public class Member_Update extends AppCompatActivity {
                         Log.d(TAG, "更新會員成功 str=" + str  );
                         String Data = new JSONObject(str).getString("data");
 
-                        setAlertDialog1Event("更新會員成功", Data);
+                        EzLib.setAlertDialog1Event("更新會員成功", Data);
 
                         break;
 
                     default:
                         Log.d(TAG, " 未處理的 msg=" + msg);
-                        setAlertDialog1Event("發生錯誤", msg.toString());
+                        EzLib.setAlertDialog1Event("發生錯誤", msg.toString());
                         break;
                 }
 
@@ -233,12 +221,14 @@ public class Member_Update extends AppCompatActivity {
             {
                 Log.d(TAG, "例外 msg=" + ex.getMessage());
                 Log.d(TAG, "例外 msg=" + ex.toString());
-                setAlertDialog1Event( "例外", ex.toString());
+                EzLib.setAlertDialog1Event( "例外", ex.toString());
             }
 
         }
     };
 
+    //==============================================================================================
+    // 確定按下退出鍵
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {   //確定按下退出鍵

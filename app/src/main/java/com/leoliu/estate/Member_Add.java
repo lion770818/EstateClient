@@ -41,7 +41,7 @@ public class Member_Add extends AppCompatActivity {
     private static EditText EditPhoneNumber;
     private static EditText EditSalary;
 
-
+    private static Spinner mSpinner;
     final String[] lunch = {"一般員工", "組長", "主任", "經理", "人資", "會計", "最高管理者"};
     private static int iVip_rank = 0; // 會員等級
     private static Button button_addMember;
@@ -50,6 +50,8 @@ public class Member_Add extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_member_add);
         context = this;
+        EzLib.onCreate(this,TAG);
+
         EditAccount         = (EditText)findViewById(R.id.editText_Account);
         EditPassword        = (EditText)findViewById(R.id.editText_Password);
         EditName            = (EditText)findViewById(R.id.editText_Name);
@@ -59,12 +61,12 @@ public class Member_Add extends AppCompatActivity {
         EditSalary          = (EditText)findViewById(R.id.editText_Salary);
 
         // 會員等級
-        Spinner spinner = (Spinner)findViewById(R.id.SpinnerVipRank);
+        mSpinner = (Spinner)findViewById(R.id.SpinnerVipRank);
         ArrayAdapter<String> lunchList = new ArrayAdapter<>(context,
                 android.R.layout.simple_spinner_dropdown_item,
                 lunch);
-        spinner.setAdapter(lunchList);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpinner.setAdapter(lunchList);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 iVip_rank = position;
@@ -142,23 +144,6 @@ public class Member_Add extends AppCompatActivity {
     }
 
     //==============================================================================================
-    // http://rx1226.pixnet.net/blog/post/305873256-%5Bandroid%5D-10-1-%E5%9F%BA%E7%A4%8Edialog
-    private void setAlertDialog1Event( String Title, String Message ){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder( context );
-
-        builder.setTitle(Title);
-        builder.setMessage(Message);
-        builder.setPositiveButton("關閉", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-    //==============================================================================================
     // 封包事件接收函式
     private Handler mHandler = new Handler(){
         @Override
@@ -176,13 +161,23 @@ public class Member_Add extends AppCompatActivity {
                         Log.d(TAG, "創建會員成功 str=" + str  );
                         String Data = new JSONObject(str).getString("data");
 
-                        setAlertDialog1Event("創建會員成功", Data);
+                        EzLib.setAlertDialog1Event("創建會員成功", Data);
+
+                        // 清除輸入的資料
+                        EditAccount.setText("");
+                        EditPassword.setText("");
+                        EditName.setText("");
+                        EditIdentityNumber.setText("");
+                        EditAddress.setText("");
+                        EditPhoneNumber.setText("");
+                        EditSalary.setText("");
+                        mSpinner.setSelection(0);
 
                         break;
 
                     default:
                         Log.d(TAG, " 未處理的 msg=" + msg);
-                        setAlertDialog1Event("未處理的cmd", msg.toString());
+                        EzLib.setAlertDialog1Event("錯誤", msg.toString());
                         break;
                 }
 
@@ -190,12 +185,14 @@ public class Member_Add extends AppCompatActivity {
             {
                 Log.d(TAG, "例外 msg=" + ex.getMessage());
                 Log.d(TAG, "例外 msg=" + ex.toString());
-                setAlertDialog1Event( "例外", ex.toString());
+                EzLib.setAlertDialog1Event( "例外", ex.toString());
             }
 
         }
     };
 
+    //==============================================================================================
+    // 確定按下退出鍵
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {   //確定按下退出鍵

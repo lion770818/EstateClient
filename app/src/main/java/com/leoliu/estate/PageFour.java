@@ -151,10 +151,8 @@ public class PageFour extends PageView  {
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(mContext, "點到刪除", Toast.LENGTH_SHORT).show();
 
+                        // 儲存刪除的idx
                         DeletePosition = position;
-                        //String item = (String) listAdapter.getItem(position);
-                        //listAdapter.remove(item);
-                        //listAdapter.notifyDataSetChanged();
 
                         try {
 
@@ -193,7 +191,7 @@ public class PageFour extends PageView  {
                         {
                             Log.d(TAG, "例外 msg=" + ex.getMessage());
                             Log.d(TAG, "例外 msg=" + ex.toString());
-                            setAlertDialog1Event( "例外", ex.toString());
+                            EzLib.setAlertDialog1Event( "例外", ex.toString());
                         }
 
                     }
@@ -204,10 +202,6 @@ public class PageFour extends PageView  {
                         Toast.makeText(mContext, "點到取消", Toast.LENGTH_SHORT).show();
 
                         /*
-                        Memberlist.add("新會員1");
-                        Memberlist.add("新會員2");
-                        Memberlist.add("新會員3");
-                        Log.d(TAG, "Tasklist size=" + Memberlist.size() );
                         listAdapter = new ArrayAdapter(mContext,android.R.layout.simple_list_item_single_choice,Memberlist);
                         listView.setAdapter(listAdapter);
                         */
@@ -216,6 +210,9 @@ public class PageFour extends PageView  {
                 })
                 .show();
     }
+
+    //==============================================================================================
+    // 更新UI
     @Override
     public void refresh() {
 
@@ -255,28 +252,11 @@ public class PageFour extends PageView  {
         {
             Log.d(TAG, "例外 msg=" + ex.getMessage());
             Log.d(TAG, "例外 msg=" + ex.toString());
-            setAlertDialog1Event( "例外", ex.toString());
+            EzLib.setAlertDialog1Event( "例外", ex.toString());
         }
 
     }
 
-    //==============================================================================================
-    // http://rx1226.pixnet.net/blog/post/305873256-%5Bandroid%5D-10-1-%E5%9F%BA%E7%A4%8Edialog
-    private void setAlertDialog1Event( String Title, String Message ){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder( mContext );
-
-        builder.setTitle(Title);
-        builder.setMessage(Message);
-        builder.setPositiveButton("關閉", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
     //==============================================================================================
     // 封包事件接收函式
     private Handler mHandler = new Handler(){
@@ -333,7 +313,7 @@ public class PageFour extends PageView  {
                             }
                             break;
                             default:
-                                setAlertDialog1Event("未處理的Cmd", Cmd );
+                                EzLib.setAlertDialog1Event("未處理的Cmd", Cmd );
                                 break;
                         }
 
@@ -360,7 +340,7 @@ public class PageFour extends PageView  {
 
                     default:
                         Log.d(TAG, " 未處理的 msg=" + msg);
-                        setAlertDialog1Event("發生錯誤", msg.toString());
+                        EzLib.setAlertDialog1Event("發生錯誤", msg.toString());
                         button_addMember.setEnabled(false);
                         break;
                 }
@@ -369,7 +349,7 @@ public class PageFour extends PageView  {
             {
                 Log.d(TAG, "例外 msg=" + ex.getMessage());
                 Log.d(TAG, "例外 msg=" + ex.toString());
-                setAlertDialog1Event( "例外", ex.toString());
+                EzLib.setAlertDialog1Event( "例外", ex.toString());
             }
 
         }
