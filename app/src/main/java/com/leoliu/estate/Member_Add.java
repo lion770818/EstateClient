@@ -42,7 +42,8 @@ public class Member_Add extends AppCompatActivity {
     private static EditText EditSalary;
 
     private static Spinner mSpinner;
-    final String[] lunch = {"一般員工", "組長", "主任", "經理", "人資", "會計", "最高管理者"};
+
+    final String[] lunch = {"實習生","一般員工", "組長", "主任", "經理", "人資", "會計", "最高管理者","董事長"};
     private static int iVip_rank = 0; // 會員等級
     private static Button button_addMember;
 
