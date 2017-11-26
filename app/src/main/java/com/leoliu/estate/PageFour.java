@@ -40,19 +40,19 @@ public class MainActivity extends FragmentActivity implements
 // ArrayAdapter的使用 http://hhliu-skills.blogspot.tw/2012/04/arrayadapter.html
 public class PageFour extends PageView  {
 
-    static String TAG = "PageOne";
-    private ProgressDialog Loadingdialog;
-    Button button_addMember;      // 新增工作
+    static String TAG = "PageFour";
+    private ProgressDialog Loadingdialog;   // loading
+    Button button_addMember;                // 新增會員
 
 
     Context mContext;
 
-    public ListView listView;
+    public ListView listView;               // 會員列表
 
     private List Memberlist = new ArrayList();
     private ArrayAdapter<String> listAdapter;
+    private  static  int DeletePosition = 0;    // 刪除的位置
 
-    private  static  int DeletePosition = 0;
     public PageFour(Context context, Bundle savedInstanceStateBk) {
 
         super(context);
@@ -60,11 +60,10 @@ public class PageFour extends PageView  {
 
         View view = LayoutInflater.from(context).inflate(R.layout.pager_item4, null);
         TextView textView = (TextView) view.findViewById(R.id.text);
-        textView.setText("請選擇要執行的項目");
+        textView.setText("員工管理");
         addView(view);
 
-
-
+        // 新增會員按鈕
         button_addMember = (Button) findViewById(R.id.button_addMember);
         button_addMember.setOnClickListener(new OnClickListener(){
 
@@ -171,12 +170,12 @@ public class PageFour extends PageView  {
                             JSONObject jsonObject= new JSONObject();
 
                             jsonObject.put("sys", "system");
-                            jsonObject.put("cmd", "member_delete");
+                            jsonObject.put("cmd", NET_CMD.NET_CMD_MEMBER_DELETE);
                             jsonObject.put("sn", 12345);
                             jsonObject.put("isEncode", false);
 
                             JSONObject jsonObjectData= new JSONObject();
-                            jsonObjectData.put("PlatformID", 0);
+                            jsonObjectData.put("PlatformID", 1);
                             jsonObjectData.put("user_id", user_id);
                             jsonObjectData.put("Account", account);
                             jsonObjectData.put("Password", password);
@@ -231,7 +230,7 @@ public class PageFour extends PageView  {
             JSONObject jsonObject= new JSONObject();
 
             jsonObject.put("sys", "system");
-            jsonObject.put("cmd", "member_list_get");
+            jsonObject.put("cmd", NET_CMD.NET_CMD_MEMBER_LIST_GET);
             jsonObject.put("sn", 12345);
             jsonObject.put("isEncode", false);
 
@@ -269,10 +268,10 @@ public class PageFour extends PageView  {
             try {
 
                 switch(msg.what){
-                    case 0:
+                    case ERROR_CODE.ERROR_CODE_SUCCESS:
 
                         String str = (String)msg.obj;
-                        Log.d(TAG, "讀取會員成功 str=" + str  );
+                        Log.d(TAG, "讀取會員清單成功 str=" + str  );
 
                         String Cmd = new JSONObject(str).getString("ret");
                         String Data = new JSONObject(str).getString("data");
@@ -281,7 +280,7 @@ public class PageFour extends PageView  {
 
                         switch (Cmd)
                         {
-                            case "member_list_get":
+                            case NET_CMD.NET_CMD_MEMBER_LIST_GET:
                             {
 
                                 int data_count = new JSONObject(Data).getInt("data_count");
@@ -305,7 +304,7 @@ public class PageFour extends PageView  {
                             }
                             break;
 
-                            case "member_delete":
+                            case NET_CMD.NET_CMD_MEMBER_DELETE:
                             {
                                 String item = (String) listAdapter.getItem(DeletePosition);
                                 listAdapter.remove(item);

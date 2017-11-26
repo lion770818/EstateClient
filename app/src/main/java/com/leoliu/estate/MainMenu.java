@@ -75,8 +75,8 @@ public class MainMenu extends AppCompatActivity {
     //
     private void initData() {
         pageList = new ArrayList<>();
-        pageList.add(new PageOne(MainMenu.this, savedInstanceStateBk));
-        pageList.add(new PageTwo(MainMenu.this));
+        pageList.add(new PageOne(MainMenu.this, savedInstanceStateBk));     // 工作管理
+        pageList.add(new PageTwo(MainMenu.this));                           // 顧客管理
         pageList.add(new PageThree(MainMenu.this));
         pageList.add(new PageFour(MainMenu.this,savedInstanceStateBk));
 
@@ -103,20 +103,20 @@ public class MainMenu extends AppCompatActivity {
         mTablayout.addTab( tab );
 
 
-         tab1 = mTablayout.newTab();
+        tab1 = mTablayout.newTab();
         tab1.setText("客戶管理");
         tab1.setTag(1);
         tab1.setIcon( R.drawable.member );
         mTablayout.addTab( tab1 );
 
 
-         tab2 = mTablayout.newTab();
-        tab2.setText("物件管理");
+        tab2 = mTablayout.newTab();
+        tab2.setText("房屋管理");
         tab2.setTag(2);
         tab2.setIcon( R.drawable.home );
         mTablayout.addTab( tab2 );
 
-         tab3 = mTablayout.newTab();
+        tab3 = mTablayout.newTab();
         tab3.setText("員工管理");
         tab3.setTag(3);
         tab3.setIcon( R.drawable.member );
@@ -189,7 +189,7 @@ public class MainMenu extends AppCompatActivity {
             try {
 
                 switch(msg.what){
-                    case 0:
+                    case ERROR_CODE.ERROR_CODE_SUCCESS:
 
                         String str = (String)msg.obj;
                         Log.d(TAG, "取得資料成功 str=" + str  );

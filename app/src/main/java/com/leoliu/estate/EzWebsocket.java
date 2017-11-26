@@ -32,6 +32,8 @@ import static com.leoliu.estate.NET_STATUS.NET_STATUS_ERROR_RECEIVE;
 import static com.leoliu.estate.NET_STATUS.NET_STATUS_ERROR_SEND;
 
 
+//===============================================================================================================
+// 網路狀態
 enum NET_STATUS {
     NET_STATUS_SUCCESS,
     NET_STATUS_ERROR_RECEIVE,
@@ -39,8 +41,65 @@ enum NET_STATUS {
     NET_STATUS_ERROR_CLOSE,
     NET_STATUS_ERROR,
 
-
 }
+
+/*
+//===============================================================================================================
+// 網路狀態
+enum ERROR_CODE {
+    ERROR_CODE_SUCCESS(0),          // 執行成功
+    ERROR_CODE_NO_FIND_CMD(-1),     // 找不到cmd
+    ERROR_CODE_NO_FIND_ACCOUNT(-2)  // 找不到帳號
+    ;
+
+    private int value;
+
+    private ERROR_CODE(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return this.value;
+    }
+}*/
+//===============================================================================================================
+// 網路封包
+interface ERROR_CODE {
+    public static final int ERROR_CODE_SUCCESS = 0;
+}
+//===============================================================================================================
+// 網路封包
+interface NET_CMD {
+
+    // 一般帳號
+    public static final String NET_CMD_LOGIN = "login";
+    public static final String NET_CMD_LOGOUT = "logout";
+
+    // 會員
+    public static final String NET_CMD_MEMBER_INSERT = "member_insert";
+    public static final String NET_CMD_MEMBER_UPDATE = "member_update";
+    public static final String NET_CMD_MEMBER_DELETE = "member_delete";
+    public static final String NET_CMD_MEMBER_LIST_GET = "member_list_get";
+
+    // 顧客
+    public static final String NET_CMD_CUSTOMER_INSERT = "customer_insert";
+    public static final String NET_CMD_CUSTOMER_UPDATE = "customer_update";
+    public static final String NET_CMD_CUSTOMER_DELETE = "customer_delete";
+    public static final String NET_CMD_CUSTOMER_LIST_GET  = "customer_list_get";
+
+    // 工作日誌
+    public static final String NET_CMD_TASK_INSERT = "task_insert";
+    public static final String NET_CMD_TASK_UPDATE = "task_update";
+    public static final String NET_CMD_TASK_DELETE = "task_delete";
+    public static final String NET_CMD_TASK_LIST_GET = "task_list_get";
+
+    // 房屋
+    public static final String NET_CMD_HOME_INSERT = "home_insert";
+    public static final String NET_CMD_HOME_UPDATE = "home_update";
+    public static final String NET_CMD_HOME_DELETE = "home_delete";
+    public static final String NET_CMD_HOME_LIST_GET = "home_list_get";
+}
+
 // SSLClientExample https://github.com/TooTallNate/Java-WebSocket/blob/master/src/main/example/SSLClientExample.java
 
 // https://stackoverflow.com/questions/5571092/convert-object-to-json-in-android
@@ -121,6 +180,8 @@ public class EzWebsocket {
                         msg.what = NET_STATUS_ERROR_CLOSE.ordinal();
                         msg.obj = "斷線了";
                         mHandler.sendMessage(msg);
+
+                        //webSocketClient = new WebSocketClient( serverURI, new Draft_6455() ){};
                     }catch (Exception ex )
                     {
                         Log.d(TAG, "Exception=" + ex.toString());

@@ -23,7 +23,7 @@ import java.util.concurrent.RunnableFuture;
 import org.java_websocket.client.WebSocketClient;
 //
 // 參考  http://www.eoeandroid.com/thread-543421-1-1.html
-enum NET_CMD {
+enum NET_CMD_OLD {
     NET_CMD_LOGIN,
     NET_CMD_LOGOUT,
     NET_CMD_REGISITER
@@ -46,7 +46,7 @@ public class EzNetWork {
         mActivity = activity;
     }
 
-    public static String SenCmd( NET_CMD Cmd, String urlParameters )
+    public static String SenCmd( NET_CMD_OLD Cmd, String urlParameters )
     {
         String Ret = "";
         switch ( Cmd )

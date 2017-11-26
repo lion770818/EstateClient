@@ -27,16 +27,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="輸入工作項目" />
+            android:text="工作項目" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/editTaskName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name1" />
+            android:hint="請輸入工作項目" />
 
     </LinearLayout>
 
@@ -54,16 +54,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="輸入工作項目2" />
+            android:text="工作內容" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/editTaskDescribe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name2" />
+            android:hint="請輸入工作內容" />
 
     </LinearLayout>
 
@@ -82,45 +82,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="輸入工作項目2" />
+            android:text="工作備註" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/editMemo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name3" />
+            android:hint="請輸入工作備註" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/Layout4"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:paddingTop="1dip"
-        android:layout_below="@+id/Layout1"
-        android:visibility="visible">
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="輸入工作項目2" />
-
-        <EditText
-            android:id="@+id/editText4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name4" />
-
-    </LinearLayout>
     <Button
         android:id="@+id/button_submit"
         android:layout_width="wrap_content"

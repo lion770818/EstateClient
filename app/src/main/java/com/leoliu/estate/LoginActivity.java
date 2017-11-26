@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.RunnableFuture;
 
+import static com.leoliu.estate.ERROR_CODE.ERROR_CODE_SUCCESS;
 
 
 //  Android之WebSocket使用方法 http://www.nljb.net/default/Android%E4%B9%8BWebSocket%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/
@@ -81,12 +82,14 @@ public class LoginActivity extends AppCompatActivity {
 
         EzSharedPreferences.onCreate(this,TAG);
         EzNetWork.onCreate(this,TAG);
-        EzWebsocket.onCreate(this,"ws://192.168.43.75:1234/One1CloudGameCmd");
+        EzWebsocket.onCreate(this,"ws://192.168.43.75:3000/One1CloudGameCmd");  //my
+        //EzWebsocket.onCreate(this,"ws://192.168.0.104:3000/One1CloudGameCmd");   //home
+        //EzWebsocket.onCreate(this,"ws://52.198.59.96:3000/One1CloudGameCmd");  //onmyhomd
 
         // 抓uuid
         // http://blog.mosil.biz/2014/05/android-device-id-uuid/#randomUUID
-        //String uuid = UUID.randomUUID().toString();
-        //Log.d(TAG,"uuid=" + uuid );
+        // String uuid = UUID.randomUUID().toString();
+        // Log.d(TAG,"uuid=" + uuid );
 
         try {
             TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -157,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                                 JSONObject jsonObject= new JSONObject();
 
                                 jsonObject.put("sys", "system");
-                                jsonObject.put("cmd", "login");
+                                jsonObject.put("cmd", NET_CMD.NET_CMD_LOGIN);
                                 jsonObject.put("sn", 12345);
                                 jsonObject.put("isEncode", false);
 
@@ -183,47 +186,6 @@ public class LoginActivity extends AppCompatActivity {
                                     EzSharedPreferences.SaveData("Password", PasswordStr);
                                 }
 
-
-                                /*
-                                // 登入中
-                                EzNetWork.Url =  "http://52.198.59.96:3000/";
-                                String ret = EzNetWork.SenCmd( NET_CMD.NET_CMD_LOGIN, "UID=1&Account=cat111&PassWord=1234");
-                                Log.d(TAG, "excutePost str=" + ret);
-
-                                // http://www.cnblogs.com/qianxudetianxia/archive/2011/07/22/2079979.html
-                                int Code = new JSONObject(ret).getInt("Code");
-                                String Account = new JSONObject(ret).getString("Account");
-
-                                Log.d(TAG, "excutePost Code=" + Code);
-                                if( Code == 0 )
-                                {
-                                    Log.d(TAG, "excutePost 登入成功"  );
-                                    String Data = new JSONObject(ret).getString("Data");
-                                    JSONArray numberLis = new JSONObject(ret).getJSONArray("Data");
-                                    // 登入成功
-                                    //for(int i=0; i<numberLis.length(); i++){
-                                        int i = 0;
-                                        //获取数组中的数组
-                                        int UID = numberLis.getJSONObject(i).getInt("UID");
-                                        String Name = numberLis.getJSONObject(i).getString("Name");
-                                        String PassWord = numberLis.getJSONObject(i).getString("PassWord");
-
-                                        EzSharedPreferences.SaveData("Account", Account);
-                                        EzSharedPreferences.SaveData("Name", Name);
-                                        EzSharedPreferences.SaveData("UID", UID);
-                                    //}
-
-                                    Message msg = new Message();
-                                    msg.what = 1;
-                                    mHandler.sendMessage(msg);
-                                }
-                                else
-                                {// 登入失敗
-                                    Message msg = new Message();
-                                    msg.what = 0;
-                                    mHandler.sendMessage(msg);
-                                }
-                                */
 
                                 IsLoop = false;
                                 //Loadingdialog.dismiss();
@@ -284,14 +246,19 @@ public class LoginActivity extends AppCompatActivity {
             try {
 
                 switch(msg.what){
-                    case 0:
+                    case ERROR_CODE_SUCCESS:
 
                         String str = (String)msg.obj;
                         Log.d(TAG, "登入成功 str=" + str  );
                         String Data = new JSONObject(str).getString("data");
 
-                        String Name = new JSONObject(Data).getString("ip");
-                        String NickName = new JSONObject(Data).getString("phone_number");
+                        int user_id = new JSONObject(Data).getInt("user_id");
+                        String nickname = new JSONObject(Data).getString("nickname");
+                        String ip = new JSONObject(Data).getString("ip");
+                        String phone_number = new JSONObject(Data).getString("phone_number");
+
+                        EzSharedPreferences.SaveData("user_id", user_id);
+                        EzSharedPreferences.SaveData("nickname", nickname);
 
                         GotoMainMenu();
                         break;

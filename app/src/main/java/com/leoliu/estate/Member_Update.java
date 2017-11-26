@@ -38,10 +38,11 @@ public class Member_Update extends AppCompatActivity {
     private static EditText EditPhoneNumber;
     private static EditText EditSalary;
 
+    //private static  int max = 8;
     private static Spinner mSpinner;
-    final String[] lunch = {"一般員工", "組長", "主任", "經理", "人資", "會計", "最高管理者"};
+    final String[] lunch = { "新進員工", "一般員工", "組長", "主任", "經理", "人資", "會計", "最高管理者", "董事長"};
     private static int iVip_rank = 0; // 會員等級
-    private static Button button_addMember;
+    private static Button button_UpdateMember;
 
     //==============================================================================================
     // init
@@ -84,8 +85,8 @@ public class Member_Update extends AppCompatActivity {
         });
 
         // 送出按鈕
-        button_addMember = (Button) findViewById(R.id.button_submit);
-        button_addMember.setOnClickListener(new View.OnClickListener(){
+        button_UpdateMember = (Button) findViewById(R.id.button_submit);
+        button_UpdateMember.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
@@ -107,7 +108,7 @@ public class Member_Update extends AppCompatActivity {
 
                     JSONObject jsonObject= new JSONObject();
                     jsonObject.put("sys", "system");
-                    jsonObject.put("cmd", "member_update");
+                    jsonObject.put("cmd", NET_CMD.NET_CMD_MEMBER_UPDATE);
                     jsonObject.put("sn", 12345);
                     jsonObject.put("isEncode", false);
 
@@ -179,7 +180,13 @@ public class Member_Update extends AppCompatActivity {
             EditPhoneNumber.setText(PhoneNumber);
             EditSalary.setText(Salary);
 
-            mSpinner.setSelection(vip_rank);
+            if( vip_rank >= 0 && vip_rank < 8 )
+                mSpinner.setSelection(vip_rank);
+            else{
+                String str = "錯誤的長度 vip_rank=" +  Integer.toString(vip_rank);
+                EzLib.setAlertDialog1Event( "錯誤", str );
+            }
+
         }catch (Exception ex)
         {
             Log.d(TAG, "例外 msg=" + ex.getMessage());
@@ -201,12 +208,11 @@ public class Member_Update extends AppCompatActivity {
             try {
 
                 switch(msg.what){
-                    case 0:
+                    case ERROR_CODE.ERROR_CODE_SUCCESS:
 
                         String str = (String)msg.obj;
                         Log.d(TAG, "更新會員成功 str=" + str  );
                         String Data = new JSONObject(str).getString("data");
-
                         EzLib.setAlertDialog1Event("更新會員成功", Data);
 
                         break;

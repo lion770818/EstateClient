@@ -105,7 +105,7 @@ public class Member_Add extends AppCompatActivity {
 
                     JSONObject jsonObject= new JSONObject();
                     jsonObject.put("sys", "system");
-                    jsonObject.put("cmd", "member_insert");
+                    jsonObject.put("cmd", NET_CMD.NET_CMD_MEMBER_INSERT);
                     jsonObject.put("sn", 12345);
                     jsonObject.put("isEncode", false);
 
@@ -155,8 +155,9 @@ public class Member_Add extends AppCompatActivity {
 
             try {
 
+                //int value = ERROR_CODE.ERROR_CODE_SUCCESS.getValue();
                 switch(msg.what){
-                    case 0:
+                    case ERROR_CODE.ERROR_CODE_SUCCESS:
 
                         String str = (String)msg.obj;
                         Log.d(TAG, "創建會員成功 str=" + str  );
@@ -200,7 +201,7 @@ public class Member_Add extends AppCompatActivity {
 
             //ConfirmExit(); //呼叫ConfirmExit()函數
             Log.d(TAG, "onKeyDown keyCode=" + keyCode);
-            setResult(3);
+            setResult(3);  // 0:工作 1:客戶 2:房屋物件 3:員工
             finish();
             return true;
 
