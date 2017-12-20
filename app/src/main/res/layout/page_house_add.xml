@@ -178,6 +178,32 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/Layout6_1"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingTop="1dip"
+        android:layout_below="@+id/Layout1"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/textView6_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="房屋地區" />
+
+
+        <Spinner
+            android:id="@+id/SpinnerHomeArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="請輸入房屋地區" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/Layout7"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"

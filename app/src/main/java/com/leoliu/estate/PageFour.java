@@ -107,7 +107,7 @@ public class PageFour extends PageView  {
         });
 
         // 更新view
-        refresh();
+        //refresh();
         //將ListAdapter設定至ListView裡面
         //LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
         //lp.gravity = Gravity.CENTER_VERTICAL;
@@ -306,9 +306,13 @@ public class PageFour extends PageView  {
 
                             case NET_CMD.NET_CMD_MEMBER_DELETE:
                             {
-                                String item = (String) listAdapter.getItem(DeletePosition);
-                                listAdapter.remove(item);
-                                listAdapter.notifyDataSetChanged();
+                                //String item = (String) listAdapter.getItem(DeletePosition);
+                                //listAdapter.remove(item);
+                                //listAdapter.notifyDataSetChanged();
+                                // 清除所有UI
+                                listAdapter.clear();
+                                // 送出讀取清單封包, 重新更新UI
+                                refresh();
                             }
                             break;
                             default:
@@ -336,7 +340,10 @@ public class PageFour extends PageView  {
                         //setAlertDialog1Event("讀取會員成功", Data);
 
                         break;
-
+                    case ERROR_CODE.ERROR_CODE_DISCONNECT:
+                        Log.d(TAG, "斷線了返回登入頁");
+                        EzLib.GotoLogin(mContext);
+                        break;
                     default:
                         Log.d(TAG, " 未處理的 msg=" + msg);
                         EzLib.setAlertDialog1Event("發生錯誤", msg.toString());

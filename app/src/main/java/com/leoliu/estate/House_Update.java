@@ -33,6 +33,7 @@ public class House_Update extends AppCompatActivity {
     private static EditText editCreateTime;
     private static EditText editUpdateTime;
     private static EditText editHomeName;
+
     private static EditText editHomeAddress;
     private static EditText editHomeAge;
     private static EditText editHomeFootage;
@@ -40,10 +41,17 @@ public class House_Update extends AppCompatActivity {
     private static EditText editVip_rank;
     private static EditText editMemo;
 
-    private static Spinner mSpinner;
 
+    private static Spinner  spinnerHomeArea;
+    final String[] HomeArea = { "萬里區", "金山區", "板橋區", "汐止區", "深坑區", "石碇區", "瑞芳區", "平溪區", "雙溪區", "貢寮區", "新店區",
+            "坪林區", "烏來區", "永和區", "中和區", "土城區", "山峽區", "樹林區", "鶯歌區", "三重區", "新莊區", "泰山區", "林口區", "蘆洲區",
+            "五股區", "八里區", "淡水區", "三芝區", "石門區"};
+    private static int iHomeArea = 0; // 房屋地區
+
+    private static Spinner mSpinner;
     final String[] lunch = { "雅房", "套房", "兩房一廳", "三房兩廳", "工廠", "辦公室", "透天厝", "豪宅"};
     private static int iVip_rank = 0; // 會員等級
+
     private static Button button_UpdateHouse;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +69,32 @@ public class House_Update extends AppCompatActivity {
         editCreateTime   = (EditText)findViewById(R.id.editCreateTime);
         editUpdateTime   = (EditText)findViewById(R.id.editUpdateTime);
         editHomeName     = (EditText)findViewById(R.id.editHomeName);
+
         editHomeAddress  = (EditText)findViewById(R.id.editHomeAddress);
         editHomeAge      = (EditText)findViewById(R.id.editHomeAge);
         editHomeFootage  = (EditText)findViewById(R.id.editHomeFootage);
         editHomePrice    = (EditText)findViewById(R.id.editHomePrice);
         editMemo         = (EditText)findViewById(R.id.editMemo);
+
+        // 房屋地區
+        spinnerHomeArea  = (Spinner)findViewById(R.id.SpinnerHomeArea);
+        ArrayAdapter<String> lunchHomeList = new ArrayAdapter<>(context,
+                android.R.layout.simple_spinner_dropdown_item,
+                HomeArea);
+        spinnerHomeArea.setAdapter(lunchHomeList);
+        spinnerHomeArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                iHomeArea = position;
+                Log.d(TAG, "你選的是 position=" + position);
+                //Toast.makeText(context, "你選的是" + lunchHomeList[iHomeArea], Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // 會員等級
         mSpinner = (Spinner)findViewById(R.id.SpinnerVipRank);
@@ -87,7 +116,6 @@ public class House_Update extends AppCompatActivity {
             }
         });
 
-
         // 送出按鈕
         button_UpdateHouse = (Button) findViewById(R.id.button_submit);
         button_UpdateHouse.setOnClickListener(new View.OnClickListener(){
@@ -106,6 +134,7 @@ public class House_Update extends AppCompatActivity {
                     String CreateTime      = editCreateTime.getText().toString();
                     String UpdateTime      = editUpdateTime.getText().toString();
                     String HomeName        = editHomeName.getText().toString();
+
                     String HomeAddress     = editHomeAddress.getText().toString();
 
                     String HomeAge         = editHomeAge.getText().toString();
@@ -131,6 +160,7 @@ public class House_Update extends AppCompatActivity {
                     jsonObjectData.put("user_id", Integer.valueOf(User_ID));
                     jsonObjectData.put("nickname", NickName);
                     jsonObjectData.put("home_name", HomeName);
+                    jsonObjectData.put("home_area", iHomeArea);
                     jsonObjectData.put("home_address", HomeAddress);
                     jsonObjectData.put("home_age", Integer.valueOf(HomeAge));
                     jsonObjectData.put("home_price", Integer.valueOf(HomePrice));
@@ -181,6 +211,7 @@ public class House_Update extends AppCompatActivity {
             String updatetime = new JSONObject(Data_x).getString("updatetime");
 
             String home_name = new JSONObject(Data_x).getString("home_name");
+            int ihome_area = new JSONObject(Data_x).getInt("home_area");
             String home_address = new JSONObject(Data_x).getString("home_address");
             int home_age = new JSONObject(Data_x).getInt("home_age");
             float home_footage = new JSONObject(Data_x).getInt("home_footage");
@@ -196,12 +227,20 @@ public class House_Update extends AppCompatActivity {
             editCreateTime.setText(createtime);
             editUpdateTime.setText(updatetime);
             editHomeName.setText(home_name);
+
             editHomeAddress.setText(home_address);
 
             editHomeAge.setText(Integer.toString(home_age));
             editHomeFootage.setText(shome_footage);
             editHomePrice.setText( Integer.toString(home_price));
             editMemo.setText(memo);
+
+            if( ihome_area >= 0 && ihome_area < HomeArea.length )
+                spinnerHomeArea.setSelection(ihome_area);
+            else{
+                String str = "錯誤的長度 ihome_area=" +  Integer.toString(ihome_area);
+                EzLib.setAlertDialog1Event( "錯誤", str );
+            }
 
             if( vip_rank >= 0 && vip_rank < lunch.length )
                 mSpinner.setSelection(vip_rank);

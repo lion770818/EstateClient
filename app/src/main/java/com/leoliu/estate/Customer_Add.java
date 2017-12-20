@@ -24,7 +24,7 @@ import org.json.JSONObject;
 public class Customer_Add extends AppCompatActivity {
 
     static String TAG = "Customer_Add";
-    private static Context context;
+    private static Context mContext;
     private ProgressDialog Loadingdialog;
 
     private static EditText editCustomerName;
@@ -54,7 +54,7 @@ public class Customer_Add extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page_customer_add);
 
-        context = this;
+        mContext = this;
         EzLib.onCreate(this,TAG);
 
         //Bundle bundle =this.getIntent().getExtras();
@@ -76,7 +76,7 @@ public class Customer_Add extends AppCompatActivity {
 
         // 顧客性別
         SpinnerCustomerGender = (Spinner)findViewById(R.id.SpinnerCustomerGender);
-        ArrayAdapter<String> lunchList = new ArrayAdapter<>(context,
+        ArrayAdapter<String> lunchList = new ArrayAdapter<>(mContext,
                 android.R.layout.simple_spinner_dropdown_item,
                 Sexlunch);
         SpinnerCustomerGender.setAdapter(lunchList);
@@ -96,7 +96,7 @@ public class Customer_Add extends AppCompatActivity {
 
         // 顧客等級
         SpinnerVipRank = (Spinner)findViewById(R.id.SpinnerVipRank);
-        ArrayAdapter<String> lunchList2 = new ArrayAdapter<>(context,
+        ArrayAdapter<String> lunchList2 = new ArrayAdapter<>(mContext,
                 android.R.layout.simple_spinner_dropdown_item,
                 lunch);
         SpinnerVipRank.setAdapter(lunchList2);
@@ -125,7 +125,7 @@ public class Customer_Add extends AppCompatActivity {
 
                 try {
 
-                    Loadingdialog = ProgressDialog.show(context, "傳送資料中", "請耐心等待3秒...",true);
+                    Loadingdialog = ProgressDialog.show(mContext, "傳送資料中", "請耐心等待3秒...",true);
 
                     String CustomerName             = editCustomerName.getText().toString();
                     String CustomerAge              = editCustomerAge.getText().toString();
@@ -184,9 +184,7 @@ public class Customer_Add extends AppCompatActivity {
                 {
                     ex.printStackTrace();
                     Loadingdialog.dismiss();
-                    Message msg = new Message();
-                    msg.what = 0;
-                    // mHandler.sendMessage(msg);
+                    EzLib.setAlertDialog1Event("錯誤", "輸入資料格式錯誤");
                     Log.d(TAG, "Exception=" + ex.toString());
                 }
 

@@ -36,6 +36,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+//===============================================================================================================
+// 頁面
+interface PAGE_KIND {
+
+    public static final int PAGE_KIND_TASK = 0;         // 工作清單頁面
+    public static final int PAGE_KIND_CUSTOMER = 1;     // 顧客頁面
+    public static final int PAGE_KIND_HOME = 2;         // 房屋頁面
+    public static final int PAGE_KIND_MEMBER = 3;       // 會員頁面
+
+}
 //==================================================================================================
 //
 public class MainMenu extends AppCompatActivity {
@@ -50,7 +61,7 @@ public class MainMenu extends AppCompatActivity {
     private TabLayout mTablayout;
     private ViewPager mViewPager;
     private List<PageView> pageList;
-
+    private Boolean [] RefershPageFlag = {false,false,false,false}; // 四個分頁
     Bundle savedInstanceStateBk;
 
     private static TabLayout.Tab tab;
@@ -98,54 +109,91 @@ public class MainMenu extends AppCompatActivity {
         //mTablayout.addTab(mTablayout.newTab().setText("輸入會員資料"));
         tab = mTablayout.newTab();
         tab.setText("工作管理");
-        tab.setTag(0);
+        tab.setTag(PAGE_KIND.PAGE_KIND_TASK);
         tab.setIcon( R.drawable.notebook );
         mTablayout.addTab( tab );
 
 
         tab1 = mTablayout.newTab();
         tab1.setText("客戶管理");
-        tab1.setTag(1);
+        tab1.setTag(PAGE_KIND.PAGE_KIND_CUSTOMER);
         tab1.setIcon( R.drawable.member );
         mTablayout.addTab( tab1 );
 
 
         tab2 = mTablayout.newTab();
         tab2.setText("房屋管理");
-        tab2.setTag(2);
+        tab2.setTag(PAGE_KIND.PAGE_KIND_HOME);
         tab2.setIcon( R.drawable.home );
         mTablayout.addTab( tab2 );
 
         tab3 = mTablayout.newTab();
         tab3.setText("員工管理");
-        tab3.setTag(3);
+        tab3.setTag(PAGE_KIND.PAGE_KIND_MEMBER);
         tab3.setIcon( R.drawable.member );
         mTablayout.addTab( tab3 );
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(new SamplePagerAdapter());
         initListener();
+
+        // 預設選到0
+        int PageIdx = PAGE_KIND.PAGE_KIND_TASK;
+        if(PageIdx == PAGE_KIND.PAGE_KIND_TASK )
+        {
+            RefershPageFlag[PageIdx] = true;
+            RefreshPageData(PageIdx); // 第0頁 不會觸發onTabSelected事件, 所以直接呼叫RefreshPageData
+        }else{
+            mViewPager.setCurrentItem(PageIdx);
+        }
+
+
     }
 
+    //==============================================================================================
+    // 送出封包 更新該頁面資訊
+    private  void RefreshPageData( int PageIdx ){
+
+        Log.d(TAG, "RefreshPageData(送出封包 更新該頁面資訊) PageIdx=" + PageIdx);
+        try
+        {
+            // 送出封包 更新該頁面資訊
+            PageView view = pageList.get(PageIdx);
+            view.refresh();
+        }
+        catch (Exception ex)
+        {
+            Log.d(TAG, "例外 msg=" + ex.getMessage());
+            Log.d(TAG, "例外 msg=" + ex.toString());
+        }
+    }
     //==============================================================================================
     //
     private void initListener() {
         mTablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Log.d(TAG,"被選擇到 =" + tab.getTag());
+                Log.d(TAG,"onTabSelected 被選擇到 tag=" + tab.getTag());
                 //mViewPager.setBackgroundResource(R.drawable.selector_tab_background);
-                mViewPager.setCurrentItem(tab.getPosition());
+
+                int PageIdx = tab.getPosition();
+                mViewPager.setCurrentItem(PageIdx);
+
+                if( RefershPageFlag[PageIdx] == false)
+                {
+                    RefershPageFlag[PageIdx] = true;
+                    RefreshPageData(PageIdx);
+                }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                Log.d(TAG,"onTabUnselected tag=" + tab.getTag());
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                Log.d(TAG,"onTabReselected tag=" + tab.getTag());
             }
         });
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));
@@ -218,21 +266,19 @@ public class MainMenu extends AppCompatActivity {
         }
     };
 
+    //==============================================================================================
+    // 當玩家按下返回按鈕時候
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         Log.d(TAG, "onActivityResult requestCode=" + requestCode + " resultCode=" + resultCode );
 
-        try {
-            PageView view = pageList.get(resultCode);
-            view.refresh();
-        }
-        catch (Exception ex)
-        {
-            Log.d(TAG, "例外 msg=" + ex.getMessage());
-            Log.d(TAG, "例外 msg=" + ex.toString());
-        }
+
+        EzLib.onCreate(this,TAG);
+
+        // 送出封包 更新該頁面UI
+        RefreshPageData(resultCode);
 
     }
 }

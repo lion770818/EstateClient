@@ -23,6 +23,8 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.SSLSocketFactory;
 
@@ -66,6 +68,10 @@ enum ERROR_CODE {
 // 網路封包
 interface ERROR_CODE {
     public static final int ERROR_CODE_SUCCESS = 0;
+    public static final int ERROR_CODE_NO_FIND_CMD = -1;         //找不到CMD
+
+
+    public static final int ERROR_CODE_DISCONNECT = -99999;     //斷線
 }
 //===============================================================================================================
 // 網路封包
@@ -113,6 +119,8 @@ public class EzWebsocket {
     static public URI serverURI;
 
     private static Handler mHandler;
+    List<Handler> mHandlerList = new ArrayList<>();
+    public  static NET_STATUS NetStatus = NET_STATUS.NET_STATUS_ERROR;    // 網路狀態
     //***********************************************************************************************************
     // 創建
     //***********************************************************************************************************
@@ -144,6 +152,7 @@ public class EzWebsocket {
                     System.out.println("onOpen");
                     Log.d(TAG, "已经连接到服务器【" + getURI() + "】");
 
+                    NetStatus = NET_STATUS.NET_STATUS_SUCCESS;
                     //webSocketClient.send("Hello, World!");
                 }
 
@@ -177,10 +186,11 @@ public class EzWebsocket {
                     try {
 
                         Message msg = new Message();
-                        msg.what = NET_STATUS_ERROR_CLOSE.ordinal();
+                        msg.what = ERROR_CODE.ERROR_CODE_DISCONNECT;
                         msg.obj = "斷線了";
                         mHandler.sendMessage(msg);
 
+                        NetStatus = NET_STATUS.NET_STATUS_ERROR_CLOSE;
                         //webSocketClient = new WebSocketClient( serverURI, new Draft_6455() ){};
                     }catch (Exception ex )
                     {
@@ -196,6 +206,8 @@ public class EzWebsocket {
                     Log.d(TAG, "發生onError=" + ex.getMessage());
 
                     try {
+
+                        NetStatus = NET_STATUS.NET_STATUS_ERROR_CLOSE;
 
                         Message msg = new Message();
                         msg.what = NET_STATUS_ERROR.ordinal();

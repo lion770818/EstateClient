@@ -24,7 +24,7 @@
         android:layout_below="@+id/text"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="查詢員工" />
+        android:hint="查詢員工" />
 
     <Button
         android:id="@+id/button_addMember"

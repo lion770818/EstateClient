@@ -33,6 +33,7 @@ public class House_Add extends AppCompatActivity {
     //private static EditText editCreateTime;
     //private static EditText editUpdateTime;
     private static EditText editHomeName;
+
     private static EditText editHomeAddress;
     private static EditText editHomeAge;
     private static EditText editHomeFootage;
@@ -40,8 +41,13 @@ public class House_Add extends AppCompatActivity {
     //private static EditText editVip_rank;
     private static EditText editMemo;
 
-    private static Spinner mSpinner;
+    private static Spinner  spinnerHomeArea;
+    final String[] HomeArea = { "萬里區", "金山區", "板橋區", "汐止區", "深坑區", "石碇區", "瑞芳區", "平溪區", "雙溪區", "貢寮區", "新店區",
+            "坪林區", "烏來區", "永和區", "中和區", "土城區", "山峽區", "樹林區", "鶯歌區", "三重區", "新莊區", "泰山區", "林口區", "蘆洲區",
+            "五股區", "八里區", "淡水區", "三芝區", "石門區"};
+    private static int iHomeArea = 0; // 房屋地區
 
+    private static Spinner mSpinner;
     final String[] lunch = { "雅房", "套房", "兩房一廳", "三房兩廳", "工廠", "辦公室", "透天厝", "豪宅"};
     private static int iVip_rank = 0; // 會員等級
 
@@ -59,6 +65,27 @@ public class House_Add extends AppCompatActivity {
         editHomeFootage  = (EditText)findViewById(R.id.editHomeFootage);
         editHomePrice    = (EditText)findViewById(R.id.editHomePrice);
         editMemo         = (EditText)findViewById(R.id.editMemo);
+
+        // 房屋地區
+        spinnerHomeArea  = (Spinner)findViewById(R.id.SpinnerHomeArea);
+        ArrayAdapter<String> lunchHomeList = new ArrayAdapter<>(context,
+                android.R.layout.simple_spinner_dropdown_item,
+                HomeArea);
+        spinnerHomeArea.setAdapter(lunchHomeList);
+        spinnerHomeArea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                iHomeArea = position;
+                Log.d(TAG, "你選的是 position=" + position);
+                //Toast.makeText(context, "你選的是" + lunchHomeList[iHomeArea], Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinnerHomeArea.setSelection(2);//預設板橋區
 
         // 會員等級
         mSpinner = (Spinner)findViewById(R.id.SpinnerVipRank);
@@ -114,6 +141,7 @@ public class House_Add extends AppCompatActivity {
                     //組合data
                     JSONObject jsonObjectData= new JSONObject();
                     jsonObjectData.put("home_name", HomeName);
+                    jsonObjectData.put("home_area", iHomeArea);
                     jsonObjectData.put("home_address", HomeAddress);
                     jsonObjectData.put("home_age", iHomeAge);
                     jsonObjectData.put("home_footage", fHomeFootage);
@@ -132,9 +160,7 @@ public class House_Add extends AppCompatActivity {
                 {
                     ex.printStackTrace();
                     Loadingdialog.dismiss();
-                    Message msg = new Message();
-                    msg.what = 0;
-                    mHandler.sendMessage(msg);
+                    EzLib.setAlertDialog1Event("錯誤", "輸入資料格式錯誤");
                     Log.d(TAG, "Exception=" + ex.toString());
                 }
 
@@ -171,6 +197,7 @@ public class House_Add extends AppCompatActivity {
                         editHomeFootage.setText("");
                         editHomePrice.setText("");
                         editMemo.setText("");
+                        spinnerHomeArea.setSelection(0);
                         mSpinner.setSelection(0);
 
                         break;

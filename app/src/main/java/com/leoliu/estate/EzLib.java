@@ -3,6 +3,7 @@ package com.leoliu.estate;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 
 /**
@@ -34,5 +35,20 @@ public class EzLib {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    //==============================================================================================
+    //
+    public static void GotoLogin( Context mContext){
+
+        // 登入成功 轉到第二頁
+        Intent intent = new Intent();
+        //從MainActivity 到Main2Activity
+        intent.setClass(mContext, LoginActivity.class);
+        //intent.setClassName("com.leoliu.estate.LoginActivity", "com.leoliu.estate.MainMenu" );
+
+        //intent.setClass(LoginActivity.this, Member_Add.class);
+        //開啟Activity
+        mActivity.startActivity(intent);
     }
 }

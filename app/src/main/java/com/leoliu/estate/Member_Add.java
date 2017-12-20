@@ -131,9 +131,7 @@ public class Member_Add extends AppCompatActivity {
                 {
                     ex.printStackTrace();
                     Loadingdialog.dismiss();
-                    Message msg = new Message();
-                    msg.what = 0;
-                    mHandler.sendMessage(msg);
+                    EzLib.setAlertDialog1Event("錯誤", "輸入資料格式錯誤");
                     Log.d(TAG, "Exception=" + ex.toString());
                 }
 

@@ -180,7 +180,7 @@ public class Member_Update extends AppCompatActivity {
             EditPhoneNumber.setText(PhoneNumber);
             EditSalary.setText(Salary);
 
-            if( vip_rank >= 0 && vip_rank < 8 )
+            if( vip_rank >= 0 && vip_rank <= 8 )
                 mSpinner.setSelection(vip_rank);
             else{
                 String str = "錯誤的長度 vip_rank=" +  Integer.toString(vip_rank);

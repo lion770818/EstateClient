@@ -1,5 +1,6 @@
 package com.leoliu.estate;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -72,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog Loadingdialog;
 
     private Handler mHandlerCtrl = new Handler();
-
+    private static Activity mActivity;
     //==============================================================================================
     //
     @Override
@@ -80,11 +81,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        mActivity = this;
+
         EzSharedPreferences.onCreate(this,TAG);
-        EzNetWork.onCreate(this,TAG);
-        EzWebsocket.onCreate(this,"ws://192.168.43.75:3000/One1CloudGameCmd");  //my
-        //EzWebsocket.onCreate(this,"ws://192.168.0.104:3000/One1CloudGameCmd");   //home
-        //EzWebsocket.onCreate(this,"ws://52.198.59.96:3000/One1CloudGameCmd");  //onmyhomd
+        //EzNetWork.onCreate(this,TAG);
+
 
         // 抓uuid
         // http://blog.mosil.biz/2014/05/android-device-id-uuid/#randomUUID
@@ -124,7 +125,9 @@ public class LoginActivity extends AppCompatActivity {
         Remember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast.makeText(LoginActivity.this, "記住帳密:" + isChecked + "", Toast.LENGTH_SHORT).show();
+
+                if( isChecked == true )
+                    Toast.makeText(LoginActivity.this, "記住帳密" + "", Toast.LENGTH_SHORT).show();
 
                 // 儲存是否記憶密碼flag
                 EzSharedPreferences.SaveData("Remember", isChecked);
@@ -147,6 +150,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 //HttpPost httpRequest = new HttpPost("http://13.113.26.157:3000/MblieLogin");
 
+                if(EzWebsocket.NetStatus !=  NET_STATUS.NET_STATUS_SUCCESS )
+                {
+                    //EzWebsocket.onCreate(mActivity,"ws://192.168.43.75:3000/One1CloudGameCmd");  //my
+                    //EzWebsocket.onCreate(mActivity,"ws://192.168.0.104:3000/One1CloudGameCmd");   //home
+                    EzWebsocket.onCreate(mActivity,"ws://52.198.59.96:3000/One1CloudGameCmd");  //onmyhomd
+                }
+
 
                 //WebScoketClient client;
 
@@ -157,37 +167,41 @@ public class LoginActivity extends AppCompatActivity {
                         while(IsLoop){
                             try{
 
-                                JSONObject jsonObject= new JSONObject();
-
-                                jsonObject.put("sys", "system");
-                                jsonObject.put("cmd", NET_CMD.NET_CMD_LOGIN);
-                                jsonObject.put("sn", 12345);
-                                jsonObject.put("isEncode", false);
-
-                                JSONObject jsonObjectData= new JSONObject();
-                                jsonObjectData.put("PlatformID", 1);
-                                jsonObjectData.put("GameID", 1001);
-                                jsonObjectData.put("Account", AccountStr);
-                                jsonObjectData.put("Password", PasswordStr);
-                                String Data = jsonObjectData.toString();
-
-                                jsonObject.put("data", Data);
-                                String jsonStr = jsonObject.toString();
-                                //String msg2 = "{\"sys\":\"system\", \"cmd\":\"login\", \"sn\":12345, \"isEncode\":false,\"data\":\"{\\\"PlatformID\\\":1,\\\"GameID\\\":0,\\\"Account\\\":\\\"cat111\\\",\\\"Password\\\":\\\"1234\\\"}\"}";
-                                EzWebsocket.SendMessage(jsonStr, mHandler);
-
-                                // 如果要記憶密碼
-                                boolean RememberFlag = EzSharedPreferences.readDataBoolean("Remember");
-                                if( RememberFlag == true )
+                                if(EzWebsocket.NetStatus ==  NET_STATUS.NET_STATUS_SUCCESS )
                                 {
-                                    Log.d(TAG, "記憶密碼開始 AccountStr=" + AccountStr + " PasswordStr=" + PasswordStr);
-                                    // 記憶密碼
-                                    EzSharedPreferences.SaveData("Account", AccountStr);
-                                    EzSharedPreferences.SaveData("Password", PasswordStr);
+                                    JSONObject jsonObject= new JSONObject();
+
+                                    jsonObject.put("sys", "system");
+                                    jsonObject.put("cmd", NET_CMD.NET_CMD_LOGIN);
+                                    jsonObject.put("sn", 12345);
+                                    jsonObject.put("isEncode", false);
+
+                                    JSONObject jsonObjectData= new JSONObject();
+                                    jsonObjectData.put("PlatformID", 1);
+                                    jsonObjectData.put("GameID", 1001);
+                                    jsonObjectData.put("Account", AccountStr);
+                                    jsonObjectData.put("Password", PasswordStr);
+                                    String Data = jsonObjectData.toString();
+
+                                    jsonObject.put("data", Data);
+                                    String jsonStr = jsonObject.toString();
+                                    //String msg2 = "{\"sys\":\"system\", \"cmd\":\"login\", \"sn\":12345, \"isEncode\":false,\"data\":\"{\\\"PlatformID\\\":1,\\\"GameID\\\":0,\\\"Account\\\":\\\"cat111\\\",\\\"Password\\\":\\\"1234\\\"}\"}";
+                                    EzWebsocket.SendMessage(jsonStr, mHandler);
+
+                                    // 如果要記憶密碼
+                                    boolean RememberFlag = EzSharedPreferences.readDataBoolean("Remember");
+                                    if( RememberFlag == true )
+                                    {
+                                        Log.d(TAG, "記憶密碼開始 AccountStr=" + AccountStr + " PasswordStr=" + PasswordStr);
+                                        // 記憶密碼
+                                        EzSharedPreferences.SaveData("Account", AccountStr);
+                                        EzSharedPreferences.SaveData("Password", PasswordStr);
+                                    }
+
+
+                                    IsLoop = false;
                                 }
 
-
-                                IsLoop = false;
                                 //Loadingdialog.dismiss();
                                 Thread.sleep(500);
                             }
@@ -335,6 +349,8 @@ public class LoginActivity extends AppCompatActivity {
         //開啟Activity
         startActivity(intent);
     }
+
+
 /*
     //宣告一個新的類別並擴充Thread
     class HttpThread extends Thread {
